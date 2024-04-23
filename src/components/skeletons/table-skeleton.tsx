@@ -4,24 +4,20 @@ import { Skeleton } from "../ui/skeleton";
 
 export const TableSkeleton = () => {
   return (
-    <div className="border bg-background overflow-x-auto">
+    <div className="overflow-x-auto border bg-background">
       {Array.from({ length: 11 }).map((_, index) => (
         <div
           key={index}
-          className="flex items-center border-b p-3.5 gap-6 w-[1100px]"
+          className="grid grid-cols-8 items-center gap-6 w-[1200px] border-b p-3.5"
         >
-          <Skeleton className="w-12 h-5" />
-          <Skeleton className="w-28 h-5" />
-          <Skeleton className="w-28 h-5" />
-          <Skeleton className="w-20 h-5" />
-          <Skeleton className="w-20 h-5" />
-          <Skeleton className="w-20 h-5" />
-          <Skeleton className="w-20 h-5" />
-          <Skeleton className="w-20 h-5" />
-          <Skeleton className="w-20 h-5" />
-          <Skeleton className="w-20 h-5" />
-          <Skeleton className="w-20 h-5" />
-          <Skeleton className="w-8 h-8 rounded-full" />
+          <Skeleton className="h-5" />
+          <Skeleton className="h-5" />
+          <Skeleton className="h-5" />
+          <Skeleton className="h-5" />
+          <Skeleton className="h-5" />
+          <Skeleton className="h-5" />
+          <Skeleton className="h-5" />
+          <Skeleton className="h-5" />
         </div>
       ))}
     </div>

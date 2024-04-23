@@ -10,13 +10,13 @@ export function Overview({
   data: { name: string; total: number }[];
 }) {
   return (
-    <div className="mt-12 w-full space-y-5 overflow-x-auto rounded-xl border bg-background_2 p-5 pl-0">
+    <div className="mt-12 w-full space-y-5 overflow-x-auto rounded-xl border bg-background_2 py-5">
       <h3 className="ml-5 text-2xl font-semibold">Overview</h3>
       <ResponsiveContainer
         width="100%"
         minWidth={500}
         height={350}
-        className=""
+        className="pl-2.5"
       >
         <BarChart data={data}>
           <XAxis
