@@ -1,7 +1,7 @@
 import { getGraphData } from "@/actions/graph-data";
-import { Container } from "@/components/container";
 import { Overview } from "@/app/(main)/dashboard/_components/overview";
 import { RecentAdmissions } from "@/app/(main)/dashboard/_components/recent-admissions";
+import { Container } from "@/components/container";
 import db from "@/lib/db";
 import { calculateRevenue, formatPrice } from "@/lib/utils";
 import { endOfDay, endOfMonth, startOfDay, startOfMonth } from "date-fns";
@@ -14,7 +14,6 @@ import {
   WalletMinimal,
 } from "lucide-react";
 import { Suspense } from "react";
-import { GenderPieChart } from "./_components/gender-pie-chart";
 
 const dashboardData = async () => {
   const today = new Date();

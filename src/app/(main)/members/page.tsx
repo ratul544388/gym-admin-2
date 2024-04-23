@@ -1,21 +1,22 @@
 import { BreadCrumbs } from "@/components/bread-crumbs";
 import { Container } from "@/components/container";
-import { DataTable } from "@/components/data-table";
-import { columns } from "@/components/data-table/columns";
-import { Pagination } from "@/components/pagination";
 import { ResetFilterButton } from "@/components/reset-filter-button";
 import { SearchInput } from "@/components/search-input";
+import { TableSkeleton } from "@/components/skeletons/table-skeleton";
 import { Separator } from "@/components/ui/separator";
-import db from "@/lib/db";
 import { Gender } from "@prisma/client";
-import { AddNewButton } from "./add-new-button";
+import { Suspense } from "react";
+import { AddNewButton } from "./_components/add-new-button";
+import { MembersTable } from "./_components/members-table";
+import { MembersPagination } from "./_components/members-pagination";
+import { PaginationSkeleton } from "@/components/skeletons/pagination-skeleton";
 
 type OrderBy = "asc" | "desc";
 
 export async function generateMetadata() {
   return {
-    title: "Members"
-  }
+    title: "Members",
+  };
 }
 
 const MembersPage = async ({
@@ -29,9 +30,7 @@ const MembersPage = async ({
   const membershipPlan = searchParams.membership_plan;
   const orderBy = searchParams.order_by as OrderBy;
 
-  const take = 10;
-
-  const skip = (page - 1) * take;
+  const TAKE = 10;
 
   const where: any = {
     ...(q
@@ -61,34 +60,9 @@ const MembersPage = async ({
       : {}),
   };
 
-  const totalMembersData = db.member.count({
-    where,
-  });
-
-  const membersData = db.member.findMany({
-    include: {
-      renews: {
-        take: 1,
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
-    },
-    where,
-    orderBy: [
-      { ...(orderBy ? { endDate: orderBy } : { createdAt: "desc" }) },
-      { ...(q ? { id: "asc" } : {}) },
-    ],
-    take,
-    skip,
-  });
-
-  const [members, totalMembers] = await Promise.all([
-    membersData,
-    totalMembersData,
-  ]);
-
-  const maxPages = Math.ceil(totalMembers / take);
+  // const totalMembersData = db.member.count({
+  //   where,
+  // });
 
   return (
     <Container className="flex w-full flex-col gap-4">
@@ -111,8 +85,12 @@ const MembersPage = async ({
         <SearchInput />
         <ResetFilterButton searchParams={searchParams} />
       </section>
-      <DataTable columns={columns} data={members} />
-      <Pagination maxPages={maxPages} />
+      <Suspense fallback={<TableSkeleton />}>
+        <MembersTable orderBy={orderBy} page={page} where={where} take={TAKE} />
+      </Suspense>
+      <Suspense fallback={<PaginationSkeleton />}>
+        <MembersPagination where={where} page={page} take={TAKE} />
+      </Suspense>
     </Container>
   );
 };

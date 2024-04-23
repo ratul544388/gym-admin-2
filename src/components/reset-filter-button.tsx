@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { buttonVariants } from "./ui/button";
+import { useLoadingStore } from "@/hooks/use-loading-store";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
-import { useLoadingStore } from "@/hooks/use-loading-store";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { buttonVariants } from "./ui/button";
 
 interface ResetFilterButtonProps {
   searchParams: { [key: string]: string | undefined };
@@ -13,14 +13,19 @@ interface ResetFilterButtonProps {
 
 export const ResetFilterButton = ({ searchParams }: ResetFilterButtonProps) => {
   const { setLoading } = useLoadingStore();
+  const pathname = usePathname();
   const router = useRouter();
   const page = Number(searchParams.page);
+
+  const handleClick = () => {
+    if (pathname === "/members") return;
+    setLoading(true);
+    router.refresh();
+  };
+
   return (
     <Link
-      onClick={() => {
-        setLoading(true);
-        router.refresh();
-      }}
+      onClick={handleClick}
       href="/members"
       className={cn(
         buttonVariants({ variant: "secondary" }),
