@@ -20,7 +20,6 @@ import { Input } from "@/components/ui/input";
 
 import { createMember } from "@/actions/members";
 import { admissionFee, membershipPlans } from "@/constants";
-import { MemberSchema } from "@/validation";
 import { useEffect, useState, useTransition } from "react";
 import { DatePicker } from "../date-picker";
 import { ImageUpload } from "../image-upload";
@@ -31,6 +30,7 @@ import { List } from "../list";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { ModifyPrice } from "../modify-price";
+import { MemberSchema } from "@/validation";
 
 export const CreateMemberModal = () => {
   const { isOpen, type, onClose } = useModalStore();
@@ -45,7 +45,7 @@ export const CreateMemberModal = () => {
       address: undefined,
       age: undefined,
       gender: undefined,
-      id: undefined,
+      memberId: undefined,
       phone: undefined,
       startDate: undefined,
       membershipPlan: undefined,
@@ -105,7 +105,7 @@ export const CreateMemberModal = () => {
         >
           <FormField
             control={form.control}
-            name="id"
+            name="memberId"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -113,7 +113,7 @@ export const CreateMemberModal = () => {
                     required={false}
                     autoFocus
                     disabled={isPending}
-                    label="Id"
+                    label="ID"
                     {...field}
                   />
                 </FormControl>

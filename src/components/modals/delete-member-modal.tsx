@@ -17,7 +17,7 @@ export const DeleteMemberModal = () => {
 
   const onDelete = () => {
     startTransition(() => {
-      deleteMember(member?.id as number).then(({ success, error }) => {
+      deleteMember(member?.id as string).then(({ success, error }) => {
         if (success) {
           toast.success(success);
           router.refresh();

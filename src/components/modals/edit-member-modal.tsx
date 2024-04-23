@@ -41,7 +41,7 @@ export const EditMemberModal = () => {
       address: undefined,
       age: undefined,
       gender: undefined,
-      id: undefined,
+      memberId: undefined,
       phone: undefined,
       startDate: undefined,
       membershipPlan: undefined,
@@ -56,7 +56,7 @@ export const EditMemberModal = () => {
         address,
         age,
         gender,
-        id,
+        memberId,
         phone,
         startDate,
         membershipPlan,
@@ -67,7 +67,7 @@ export const EditMemberModal = () => {
         address: address || undefined,
         age: age || undefined,
         gender,
-        id,
+        memberId,
         phone: phone || undefined,
         startDate,
         membershipPlan,
@@ -78,7 +78,7 @@ export const EditMemberModal = () => {
 
   function onSubmit(values: z.infer<typeof MemberSchema>) {
     startTransition(() => {
-      updateMember({ values, memberId: member?.id as number }).then(
+      updateMember({ values, memberId: member?.id as string }).then(
         ({ error, success }) => {
           if (success) {
             toast.success(success);
@@ -101,14 +101,14 @@ export const EditMemberModal = () => {
         >
           <FormField
             control={form.control}
-            name="id"
+            name="memberId"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
                   <Input
                     required={false}
                     disabled={isPending}
-                    label="Id"
+                    label="memberId"
                     {...field}
                   />
                 </FormControl>

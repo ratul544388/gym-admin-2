@@ -2,7 +2,7 @@ import { Gender } from "@prisma/client";
 import * as z from "zod";
 
 export const MemberSchema = z.object({
-  id: z.coerce.number().optional(),
+  memberId: z.coerce.number().optional(),
   name: z.string().min(1, "Name is required"),
   phone: z
     .string()

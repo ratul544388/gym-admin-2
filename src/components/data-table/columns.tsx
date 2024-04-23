@@ -13,7 +13,7 @@ import { CellHeader } from "./cell-header";
 
 export const columns: ColumnDef<MemberType>[] = [
   {
-    accessorKey: "id",
+    accessorKey: "memberId",
     header: "ID",
   },
   {

@@ -32,9 +32,12 @@ export const createMember = async ({
         ? modifiedCost
         : admissionFee + membershipPlan.price;
 
+    const memberId = await db.member.count() + 1;
+
     await db.member.create({
       data: {
         ...values,
+        memberId,
         endDate,
         revenue,
       },
@@ -53,7 +56,7 @@ export const updateMember = async ({
   memberId,
 }: {
   values: z.infer<typeof MemberSchema>;
-  memberId: number;
+  memberId: string;
 }) => {
   try {
     const validatedFields = MemberSchema.safeParse(values);
@@ -84,7 +87,7 @@ export const updateMember = async ({
   }
 };
 
-export const deleteMember = async (memberId: number) => {
+export const deleteMember = async (memberId: string) => {
   try {
     await db.member.delete({
       where: {
