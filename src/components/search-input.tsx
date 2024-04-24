@@ -2,14 +2,15 @@
 
 import { useLoadingStore } from "@/hooks/use-loading-store";
 import { useQueryString } from "@/hooks/use-query-string";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 
 interface SearchInputProps {}
 
 export const SearchInput = ({}: SearchInputProps) => {
-  const [value, setValue] = useState("");
+  const searchParams = useSearchParams();
+  const [value, setValue] = useState(searchParams.get("q") || "");
   const { push } = useQueryString();
   const [debouncedValue] = useDebounceValue(value, 400);
   const router = useRouter();
@@ -18,9 +19,11 @@ export const SearchInput = ({}: SearchInputProps) => {
   useEffect(() => {
     if (debouncedValue) {
       setLoading(true);
-      router.push(`/members?q=${debouncedValue.replace(/ /g, "+")}`);
+      router.push(
+        `/members?q=${debouncedValue.replace(/ /g, "+").toLowerCase()}`,
+      );
     } else {
-      push({ q: debouncedValue });
+      push({ q: debouncedValue.toLowerCase() });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, debouncedValue, setLoading]);

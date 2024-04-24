@@ -44,6 +44,6 @@ export const membershipPlans = [
     duration: 12,
     price: 10000,
   },
-];
+] as const;
 
 export const statuses = ["Active", "Pending", "Expire", "Invalid"] as const;

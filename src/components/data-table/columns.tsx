@@ -1,15 +1,22 @@
 "use client";
 
-import { membershipPlans, statuses } from "@/constants";
-import { capitalize, cn, formatDate, formatPhone } from "@/lib/utils";
+import { membershipPlans } from "@/constants";
+import {
+  capitalize,
+  cn,
+  formatDate,
+  formatPhone,
+  getMemberStatus,
+} from "@/lib/utils";
 import { MemberType } from "@/types";
 import { Gender } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { differenceInDays, format } from "date-fns";
 import { Photo } from "../photo";
 import { Badge } from "../ui/badge";
 import { CellAction } from "./cell-action";
 import { CellHeader } from "./cell-header";
+import {BsGenderFemale, BsGenderMale} from 'react-icons/bs'
+import { ArrowDownNarrowWide, ArrowUpNarrowWide, Award, Gem, Shield } from "lucide-react";
 
 export const columns: ColumnDef<MemberType>[] = [
   {
@@ -47,6 +54,7 @@ export const columns: ColumnDef<MemberType>[] = [
       return (
         <CellHeader
           items={Object.values(Gender).map((gender) => capitalize(gender))}
+          icons={[BsGenderMale, BsGenderFemale]}
           filterKey="gender"
           label="Gender"
         />
@@ -62,6 +70,7 @@ export const columns: ColumnDef<MemberType>[] = [
           items={membershipPlans.map(({ label }) => label)}
           filterKey="membership_plan"
           label="Membership Plan"
+          icons={[Shield, Award, Gem]}
         />
       );
     },
@@ -74,48 +83,16 @@ export const columns: ColumnDef<MemberType>[] = [
           items={["Asc", "Desc"]}
           filterKey="order_by"
           label="Status"
+          icons={[ArrowUpNarrowWide, ArrowDownNarrowWide]}
         />
       );
     },
     cell: ({ row }) => {
-      const getMembershipStatus = ({
-        startDate,
-        endDate,
-        hasRenews,
-      }: {
-        startDate: Date;
-        endDate: Date;
-        hasRenews: boolean;
-      }) => {
-        const difference = differenceInDays(endDate, new Date());
-
-        const day = [0, -1, 1].includes(difference) ? "Day" : "Days";
-        const leftOver = difference < 0 ? "Over" : "Left";
-
-        const today = new Date();
-        let status: (typeof statuses)[number];
-        if (startDate > today && !hasRenews) {
-          status = "Pending";
-        } else if (difference >= 0) {
-          status = "Active";
-        } else if (difference > -30) {
-          status = "Expire";
-        } else {
-          status = "Invalid";
-        }
-
-        return { difference: Math.abs(difference), day, leftOver, status };
-      };
-
       const { startDate, endDate, renews } = row.original;
 
-      const start = renews.length ? renews[0].startDate : startDate;
-      const end = renews.length ? renews[0].endDate : endDate;
-
-      const { difference, day, leftOver, status } = getMembershipStatus({
-        startDate: start,
-        endDate: end,
-        hasRenews: !!renews.length,
+      const { status, message } = getMemberStatus({
+        endDate: renews[0]?.endDate || endDate,
+        startDate: startDate > new Date() ? startDate : undefined,
       });
 
       return (
@@ -130,7 +107,7 @@ export const columns: ColumnDef<MemberType>[] = [
           >
             {status}
           </Badge>
-          {difference} {day} {leftOver}
+          {message}
         </div>
       );
     },

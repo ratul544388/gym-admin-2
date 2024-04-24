@@ -1,19 +1,26 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, LucideIcon } from "lucide-react";
 import { DropdownMenu } from "../dropdown-menu";
 import { Button } from "../ui/button";
 import { useQueryString } from "@/hooks/use-query-string";
 import { useSearchParams } from "next/navigation";
 import { useLoadingStore } from "@/hooks/use-loading-store";
+import { IconType } from "react-icons/lib";
 
 interface CellHeaderProps {
   label: string;
   items: string[];
   filterKey: string;
+  icons: (LucideIcon | IconType)[];
 }
 
-export const CellHeader = ({ items, filterKey, label }: CellHeaderProps) => {
+export const CellHeader = ({
+  items,
+  filterKey,
+  label,
+  icons,
+}: CellHeaderProps) => {
   const { push } = useQueryString();
   const searchParams = useSearchParams();
   const { setLoading } = useLoadingStore();
@@ -47,9 +54,10 @@ export const CellHeader = ({ items, filterKey, label }: CellHeaderProps) => {
   return (
     <DropdownMenu
       trigger={trigger}
-      items={items.map((item) => ({
+      items={items.map((item, index) => ({
         label: item,
         onClick: () => handleClick(item.toLowerCase()),
+        icon: icons[index],
       }))}
       value={activeValue}
     />

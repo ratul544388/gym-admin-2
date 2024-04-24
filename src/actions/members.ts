@@ -2,10 +2,10 @@
 
 import { admissionFee } from "@/constants";
 import db from "@/lib/db";
-import { calculateRevenue, getMembershipPlanByLabel } from "@/lib/utils";
+import { isAdmin } from "@/lib/is-admin";
+import { getMembershipPlanByLabel } from "@/lib/utils";
 import { MemberSchema } from "@/validation";
 import { Member } from "@prisma/client";
-import { endOfDay, endOfMonth, startOfDay, startOfMonth } from "date-fns";
 import { revalidatePath } from "next/cache";
 import * as z from "zod";
 
@@ -22,6 +22,10 @@ export const createMember = async ({
       return { error: "Invalid fields" };
     }
 
+    if (!isAdmin()) {
+      return { error: "Unauthenticated" };
+    }
+
     const membershipPlan = getMembershipPlanByLabel(values.membershipPlan);
 
     const endDate = new Date(values.startDate);
@@ -32,7 +36,7 @@ export const createMember = async ({
         ? modifiedCost
         : admissionFee + membershipPlan.price;
 
-    const memberId = await db.member.count() + 1;
+    const memberId = (await db.member.count()) + 1;
 
     await db.member.create({
       data: {
@@ -64,6 +68,10 @@ export const updateMember = async ({
       return { error: "Invalid fields" };
     }
 
+    if (!isAdmin()) {
+      return { error: "Unauthenticated" };
+    }
+
     const membershipPlan = getMembershipPlanByLabel(values.membershipPlan);
 
     const endDate = new Date(values.startDate);
@@ -89,6 +97,11 @@ export const updateMember = async ({
 
 export const deleteMember = async (memberId: string) => {
   try {
+
+    if (!isAdmin()) {
+      return { error: "Unauthenticated" };
+    }
+
     await db.member.delete({
       where: {
         id: memberId,
@@ -120,6 +133,10 @@ export const renewMember = async ({
     const endDate = new Date(startDate);
     endDate.setMonth(endDate.getMonth() + duration);
 
+    if (!isAdmin()) {
+      return { error: "Unauthenticated" };
+    }
+
     await db.member.update({
       where: {
         id: member.id,
@@ -144,4 +161,3 @@ export const renewMember = async ({
     return { error: "Something went wrong: ID or Phone might exist already" };
   }
 };
-

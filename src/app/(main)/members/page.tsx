@@ -30,7 +30,7 @@ const MembersPage = async ({
   const membershipPlan = searchParams.membership_plan;
   const orderBy = searchParams.order_by as OrderBy;
 
-  const TAKE = 10;
+  const TAKE = 1;
 
   const where: any = {
     ...(q

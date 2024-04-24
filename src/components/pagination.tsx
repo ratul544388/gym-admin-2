@@ -2,7 +2,13 @@
 
 import { useLoadingStore } from "@/hooks/use-loading-store";
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, ChevronsRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  MoreHorizontal,
+} from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import qs from "query-string";
 import { Button } from "./ui/button";
@@ -18,7 +24,14 @@ export const Pagination = ({ maxPages }: PaginationProps) => {
   const { setLoading } = useLoadingStore();
 
   const currentPage = Number(searchParams.get("page")) || 1;
-  const startPage = currentPage < 5 ? 1 : currentPage > maxPages ? 4 : 3;
+
+  let startPage = currentPage - 2;
+  if (startPage <= 0) {
+    startPage = 1;
+  }
+  if (currentPage >= maxPages) {
+    startPage = currentPage - 3;
+  }
 
   const handleClick = (page: number) => {
     if (page === currentPage) return;
@@ -34,10 +47,34 @@ export const Pagination = ({ maxPages }: PaginationProps) => {
     router.push(url);
   };
 
-  const PAGE_BUTTON_COUNT = maxPages > 5 ? 5 : maxPages || 1;
+  const showJumpAheadButton = maxPages - currentPage > 2;
+  const showJumpBackButton = currentPage - 3 >= 1;
+
+  let maxPageCount = 4;
+  if (maxPageCount < 4) {
+    maxPageCount = maxPages || 1;
+  }
+  if (showJumpAheadButton && showJumpBackButton) {
+    maxPageCount = 3;
+    startPage = currentPage - 1;
+  }
+
+  const handleJumpAhead = () => {
+    const page = currentPage + 5 > maxPages ? maxPages : currentPage + 5;
+    handleClick(page);
+  };
+
+  const handleJumpBack = () => {
+    const page = currentPage - 5 <= 1 ? 1 : currentPage - 5;
+    handleClick(page);
+  };
+
+  const showFirstPageButton = currentPage > 3;
+
+  const showLastPageButton = currentPage + 1 < maxPages;
 
   return (
-    <div className="mx-auto mt-3 flex w-fit items-center gap-2 rounded-full bg-background_2 px-3 py-2 shadow-xl">
+    <div className="mx-auto mt-3 flex w-fit items-center gap-1.5 rounded-full bg-background_2 px-3 py-2 shadow-xl xs:gap-2">
       <Button
         variant="ghost"
         size="icon"
@@ -45,9 +82,32 @@ export const Pagination = ({ maxPages }: PaginationProps) => {
         onClick={() => handleClick(currentPage - 1)}
         className={cn("size-8 rounded-full bg-background")}
       >
-        <ChevronsLeft className="size-4" />
+        <ChevronLeft className="size-4" />
       </Button>
-      {Array.from({ length: PAGE_BUTTON_COUNT }).map((_, index) => {
+      {showFirstPageButton && (
+        <Button
+          onClick={() => handleClick(1)}
+          variant="outline"
+          size="icon"
+          className={cn("size-8 rounded-full bg-background")}
+        >
+          {1}
+        </Button>
+      )}
+      {showJumpBackButton && (
+        <Button
+          onClick={handleJumpBack}
+          variant="ghost"
+          size="icon"
+          className={cn(
+            "group size-8 rounded-full bg-background text-muted-foreground",
+          )}
+        >
+          <MoreHorizontal className="size-4 group-hover:hidden" />
+          <ChevronsLeft className="hidden size-4 group-hover:block" />
+        </Button>
+      )}
+      {Array.from({ length: maxPageCount }).map((_, index) => {
         const page = startPage + index;
         return (
           <Button
@@ -61,6 +121,29 @@ export const Pagination = ({ maxPages }: PaginationProps) => {
           </Button>
         );
       })}
+      {showJumpAheadButton && (
+        <Button
+          onClick={handleJumpAhead}
+          variant="ghost"
+          size="icon"
+          className={cn(
+            "group size-8 rounded-full bg-background text-muted-foreground",
+          )}
+        >
+          <MoreHorizontal className="size-4 group-hover:hidden" />
+          <ChevronsRight className="hidden size-4 group-hover:block" />
+        </Button>
+      )}
+      {showLastPageButton && (
+        <Button
+          onClick={() => handleClick(maxPages)}
+          variant="outline"
+          size="icon"
+          className={cn("size-8 rounded-full bg-background")}
+        >
+          {maxPages}
+        </Button>
+      )}
       <Button
         onClick={() => handleClick(currentPage + 1)}
         variant="ghost"
@@ -68,7 +151,7 @@ export const Pagination = ({ maxPages }: PaginationProps) => {
         className={cn("size-8 rounded-full bg-background")}
         disabled={currentPage >= maxPages}
       >
-        <ChevronsRight className="size-4" />
+        <ChevronRight className="size-4" />
       </Button>
     </div>
   );

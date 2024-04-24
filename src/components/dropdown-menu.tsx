@@ -4,12 +4,13 @@ import { Check, LucideIcon } from "lucide-react";
 import { ReactNode, useState } from "react";
 import { Button } from "./ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { IconType } from "react-icons/lib";
 
 interface DropdownMenuProps {
   trigger: ReactNode;
   items: {
     label: string;
-    icon?: LucideIcon;
+    icon?: LucideIcon | IconType
     disabled?: boolean;
     onClick: () => void;
   }[];

@@ -17,7 +17,7 @@ model User {
 
 model Member {
   id             String  @id @default(auto()) @map("_id") @db.ObjectId
-  memberId       Int @unique
+  memberId       Int     @unique
   name           String
   age            String?
   address        String?
@@ -44,6 +44,11 @@ model Renew {
   startDate      DateTime
   endDate        DateTime
   membershipPlan String
+}
+
+model Default {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  savedRevenue Int    @default(0)
 }
 
 enum Gender {
