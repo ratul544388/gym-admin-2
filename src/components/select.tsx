@@ -11,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { useFormField } from "./ui/form";
 
 interface SelectProps {
   options: string[];

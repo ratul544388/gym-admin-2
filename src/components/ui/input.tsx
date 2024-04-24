@@ -2,7 +2,6 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { Label } from "./label";
-import { useFormField } from "./form";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -13,7 +12,6 @@ export interface InputProps
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, label, phone, required = true, ...props }, ref) => {
-    const { error } = useFormField();
     const value = props.value;
     return (
       <div className="relative">
@@ -22,7 +20,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className={cn(
             "peer flex h-[3.6rem] w-full rounded-md border border-input bg-background_2 px-3 py-1 pt-3 text-sm shadow-sm ring-primary transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground hover:bg-background_2/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
             phone && "pl-16",
-            error && "border-destructive focus-visible:ring-destructive",
             className,
           )}
           ref={ref}
