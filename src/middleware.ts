@@ -13,9 +13,9 @@ export default clerkMiddleware((auth, req) => {
 
   if (privateRoutes(req)) auth().protect();
 
-  if (privateRoutes(req) && !adminIds.includes(auth().userId as string)) {
-    return NextResponse.redirect(getUrl("/"));
-  }
+  // if (privateRoutes(req) && !adminIds.includes(auth().userId as string)) {
+  //   return NextResponse.redirect(getUrl("/"));
+  // }
 
   if (publicRoutes(req) && adminIds.includes(auth().userId as string)) {
     return NextResponse.redirect(getUrl("/dashboard"));
