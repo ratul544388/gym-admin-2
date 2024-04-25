@@ -1,15 +1,15 @@
 "use client";
 
 import { useModalStore } from "@/hooks/use-modal-store";
-import { MemberType } from "@/types";
+import { Member } from "@prisma/client";
+import { differenceInDays } from "date-fns";
 import { Calendar, Edit, MoreHorizontal, Trash2, User2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { differenceInDays } from "date-fns";
 
 interface CellActionProps {
-  member: MemberType;
+  member: Member;
 }
 
 export const CellAction = ({ member }: CellActionProps) => {
@@ -17,10 +17,7 @@ export const CellAction = ({ member }: CellActionProps) => {
   const { onOpen } = useModalStore();
 
   const isDisabledRenew = () => {
-    const endDate = member.renews.length
-      ? member.renews[0].endDate
-      : member.endDate;
-    return differenceInDays(endDate, new Date()) > 15;
+    return differenceInDays(member.endDate, new Date()) > 15;
   };
 
   const items = [

@@ -1,9 +1,9 @@
-import { MemberType } from "@/types";
+import { Member } from "@prisma/client";
 import { create } from "zustand";
 
 export type ModalType = "createMember" | "editMember" | "deleteMember" | "profileModal" | "renewModal"
 interface ModalData {
-  member?: MemberType;
+  member?: Member;
 }
 
 interface ModalStore {

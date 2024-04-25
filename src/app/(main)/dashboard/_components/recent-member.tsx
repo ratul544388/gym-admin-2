@@ -2,10 +2,10 @@
 
 import { useModalStore } from "@/hooks/use-modal-store";
 import { formatPrice } from "@/lib/utils";
-import { MemberType } from "@/types";
+import { Member } from "@prisma/client";
 
 interface RecentMemberProps {
-  member: MemberType;
+  member: Member;
 }
 
 export const RecentMember = ({ member }: RecentMemberProps) => {

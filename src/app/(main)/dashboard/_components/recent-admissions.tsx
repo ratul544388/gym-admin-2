@@ -11,14 +11,6 @@ export const RecentAdmissions = async ({}: RecentAdmissionsProps) => {
     orderBy: {
       createdAt: "desc",
     },
-    include: {
-      renews: {
-        take: 1,
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
-    },
     take: 10,
   });
 

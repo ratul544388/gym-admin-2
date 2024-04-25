@@ -21,23 +21,12 @@ export const getGraphData = async () => {
     select: {
       revenue: true,
       createdAt: true,
-      renews: {
-        select: {
-          revenue: true,
-          createdAt: true,
-        },
-      },
     },
   });
 
   members.forEach((member) => {
     const month = getMonth(member.createdAt);
-
-    const renewTotal = member.renews.reduce((total, renew) => {
-      return (total += renew.revenue);
-    }, 0);
-
-    graphData[month].total += member.revenue + renewTotal;
+    graphData[month].total += member.revenue;
   }, 0);
 
   return graphData;

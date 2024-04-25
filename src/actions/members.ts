@@ -44,6 +44,14 @@ export const createMember = async ({
         memberId,
         endDate,
         revenue,
+        membershipRecoreds: {
+          create: {
+            membershipPlan: values.membershipPlan,
+            startDate: values.startDate,
+            endDate,
+            revenue,
+          },
+        },
       },
     });
 
@@ -97,7 +105,6 @@ export const updateMember = async ({
 
 export const deleteMember = async (memberId: string) => {
   try {
-
     if (!isAdmin()) {
       return { error: "Unauthenticated" };
     }
@@ -143,7 +150,10 @@ export const renewMember = async ({
       },
       data: {
         membershipPlan: label,
-        renews: {
+        startDate,
+        endDate,
+        revenue: member.revenue + cost,
+        membershipRecoreds: {
           create: {
             membershipPlan: label,
             startDate,

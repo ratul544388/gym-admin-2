@@ -47,6 +47,7 @@ export function DatePicker({
             "relative h-[3.6rem] w-full bg-background_2 pl-3 pt-3 text-left font-normal",
             !value && "text-muted-foreground",
           )}
+          disabled={disabled}
         >
           <motion.span
             variants={{ closed: { y: "-50%" }, open: { top: 12 } }}

@@ -1,100 +1,61 @@
 import { getGraphData } from "@/actions/graph-data";
-import { DashboardCardsSkeleton } from "@/components/skeletons/dashboard-cards-skeleton";
 import db from "@/lib/db";
 import { calculateRevenue, formatPrice } from "@/lib/utils";
-import { startOfDay, endOfDay, startOfMonth, endOfMonth } from "date-fns";
+import { endOfDay, endOfMonth, startOfDay, startOfMonth } from "date-fns";
 import {
   BarChart2,
-  WalletMinimal,
-  Gem,
-  CandlestickChart,
-  Users2,
   CalendarDays,
+  CandlestickChart,
+  Gem,
+  Users2,
+  WalletMinimal,
 } from "lucide-react";
 
-
 export const Cards = async () => {
-
   const getCardData = async () => {
     const today = new Date();
 
     const todayJoinedMembersData = db.member.findMany({
       where: {
-        OR: [
-          {
+        membershipRecoreds: {
+          some: {
             startDate: {
               gte: startOfDay(today),
               lte: endOfDay(today),
             },
           },
-          {
-            renews: {
-              some: {
-                startDate: {
-                  gte: startOfDay(today),
-                  lte: endOfDay(today),
-                },
-              },
-            },
-          },
-        ],
+        },
       },
       select: {
         revenue: true,
-        renews: {
-          select: {
-            revenue: true,
-          },
-        },
       },
     });
 
     const thisMonthJoinedMembersData = db.member.findMany({
       where: {
-        OR: [
-          {
+        membershipRecoreds: {
+          some: {
             startDate: {
               gte: startOfMonth(today),
               lte: endOfMonth(today),
             },
           },
-          {
-            renews: {
-              some: {
-                startDate: {
-                  gte: startOfMonth(today),
-                  lte: endOfMonth(today),
-                },
-              },
-            },
-          },
-        ],
+        },
       },
       select: {
         revenue: true,
-        renews: {
-          select: {
-            revenue: true,
-          },
-        },
       },
     });
 
     const totalMembersData = db.member.findMany({
       select: {
-        gender: true,
         revenue: true,
-        renews: {
-          select: {
-            revenue: true,
-          },
-        },
       },
     });
 
     const todayRenewedMembersData = db.member.findMany({
       where: {
-        renews: {
+        membershipRecoreds: {
           some: {
             startDate: {
               gte: startOfDay(today),
@@ -123,9 +84,15 @@ export const Cards = async () => {
 
     return {
       todayJoinedMemberCount: todayJoinedMembers.length,
-      todaysRevenue: calculateRevenue(todayJoinedMembers),
-      thisMonthRevenue: calculateRevenue(thisMonthJoinedMembers),
-      totalRevenue: calculateRevenue(totalMembers),
+      todaysRevenue: calculateRevenue(
+        todayJoinedMembers.map(({ revenue }) => revenue),
+      ),
+      thisMonthRevenue: calculateRevenue(
+        thisMonthJoinedMembers.map(({ revenue }) => revenue),
+      ),
+      totalRevenue: calculateRevenue(
+        totalMembers.map(({ revenue }) => revenue),
+      ),
       totalMemberCount: totalMembers.length,
       todaysRenewCount: todayRenewedMembers.length,
       graphRevenue,
@@ -176,7 +143,7 @@ export const Cards = async () => {
   ];
 
   return (
-    <section className="xs:grid-cols-2 grid gap-6 lg:grid-cols-3">
+    <section className="grid gap-6 xs:grid-cols-2 lg:grid-cols-3">
       {cards.map(({ label, count, icon: Icon }, index) => (
         <div
           key={index}

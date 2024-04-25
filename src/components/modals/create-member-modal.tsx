@@ -110,6 +110,7 @@ export const CreateMemberModal = () => {
               <FormItem>
                 <FormControl>
                   <Input
+                    type="number"
                     required={false}
                     autoFocus
                     disabled={isPending}

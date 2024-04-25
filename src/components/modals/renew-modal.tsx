@@ -23,9 +23,7 @@ export const RenewModal = () => {
   const [price, setPrice] = useState(0);
 
   const [startDate, setStartDate] = useState<Date | undefined>(
-    data.member?.renews.length
-      ? data.member.renews[0].endDate
-      : data.member?.endDate,
+    data.member?.endDate,
   );
   const { member } = data;
 
@@ -38,11 +36,7 @@ export const RenewModal = () => {
   useEffect(() => {
     if (data.member) {
       setMembershipPlan(data.member?.membershipPlan);
-      setStartDate(
-        data.member?.renews.length
-          ? data.member.renews[0].endDate
-          : data.member?.endDate,
-      );
+      setStartDate(data.member.endDate);
     }
   }, [data.member]);
 
@@ -64,12 +58,12 @@ export const RenewModal = () => {
     });
   };
 
-  const { name, id, phone, membershipPlan: currentMembershipPlan } = member;
+  const { name, memberId, phone, membershipPlan: currentMembershipPlan } = member;
 
   const list = [
     {
       label: "Id",
-      value: id,
+      value: memberId,
     },
     {
       label: "Name",

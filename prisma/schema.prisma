@@ -19,9 +19,9 @@ model Member {
   id             String  @id @default(auto()) @map("_id") @db.ObjectId
   memberId       Int     @unique
   name           String
-  age            String?
+  age            Int?
   address        String?
-  phone          String?
+  phone          String? @unique
   image          String?
   membershipPlan String
   gender         Gender
@@ -31,16 +31,18 @@ model Member {
   endDate   DateTime
   revenue   Int
 
-  renews Renew[]
+  membershipRecoreds MembershipRecord[]
 }
 
-model Renew {
+model MembershipRecord {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  member         Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  revenue        Int
-  memberId       String   @db.ObjectId
-  createdAt      DateTime @default(now())
+  member   Member @relation(fields: [memberId], references: [id])
+  memberId String @db.ObjectId
+  revenue  Int
+
+  createdAt DateTime @default(now())
+
   startDate      DateTime
   endDate        DateTime
   membershipPlan String

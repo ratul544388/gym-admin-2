@@ -19,6 +19,7 @@ async function main() {
 main()
   .then(async () => {
     await prisma.$disconnect();
+    console.log("Seed Successfull");
   })
   .catch(async (e) => {
     console.error("Error while seeding database:", e);

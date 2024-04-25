@@ -30,7 +30,7 @@ export const ResetFilterButton = ({ searchParams }: ResetFilterButtonProps) => {
       className={cn(
         buttonVariants({ variant: "secondary" }),
         "text-muted-foreground",
-        (!Object.keys(searchParams).length || page === 1) && "hidden",
+        !Object.keys(searchParams).length && "hidden",
       )}
     >
       Reset

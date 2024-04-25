@@ -11,7 +11,7 @@ interface LogoProps {
 export const Logo = ({ className }: LogoProps) => {
   return (
     <Link href="/dashboard" className={cn("flex", className)}>
-      <Image src="logo.svg" width={125} height={40} alt="Logo" />
+      <Image src="logo.svg" width={174.5} height={35} alt="Logo" />
     </Link>
   );
 };

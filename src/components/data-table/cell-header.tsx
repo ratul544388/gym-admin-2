@@ -7,6 +7,7 @@ import { useQueryString } from "@/hooks/use-query-string";
 import { useSearchParams } from "next/navigation";
 import { useLoadingStore } from "@/hooks/use-loading-store";
 import { IconType } from "react-icons/lib";
+import { isEqualString } from "@/lib/utils";
 
 interface CellHeaderProps {
   label: string;
@@ -29,7 +30,7 @@ export const CellHeader = ({
 
   const handleClick = (selectedValue: string) => {
     setLoading(true);
-    if (selectedValue === searchParams.get(filterKey)) {
+    if (isEqualString(selectedValue, searchParams.get(filterKey))) {
       push({ [filterKey]: "" });
     } else {
       push({ [filterKey]: selectedValue });
@@ -56,7 +57,7 @@ export const CellHeader = ({
       trigger={trigger}
       items={items.map((item, index) => ({
         label: item,
-        onClick: () => handleClick(item.toLowerCase()),
+        onClick: () => handleClick(item),
         icon: icons[index],
       }))}
       value={activeValue}

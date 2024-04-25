@@ -1,8 +1,13 @@
+import { subDays } from "date-fns";
 import { Activity, LayoutDashboard, Users2, Wallet } from "lucide-react";
 
 export const admissionFee = 500;
 
-export const primaryColor = "#2563EB"
+export const today = new Date();
+
+export const _30DaysLessDate = subDays(today, 30);
+
+export const primaryColor = "#2563EB";
 export const fallbackImage = "/placeholder.jpg";
 
 export const sidebarLinks = [
@@ -46,4 +51,21 @@ export const membershipPlans = [
   },
 ] as const;
 
-export const statuses = ["Active", "Pending", "Expire", "Invalid"] as const;
+export const statuses = [
+  {
+    label: "Active",
+    value: "active",
+  },
+  {
+    label: "Pending",
+    value: "pending",
+  },
+  {
+    label: "Expire",
+    value: "expire",
+  },
+  {
+    label: "Invalid",
+    value: "invalid",
+  },
+] as const;

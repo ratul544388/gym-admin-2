@@ -2,7 +2,7 @@ const placeholderMembers = [
   {
     memberId: 1,
     name: "Ratul",
-    age: "24",
+    age: 24,
     address: "Dhaka Bangladesh",
     phone: "01815555105",
     membershipPlan: "Basic Plan",
@@ -66,6 +66,12 @@ const names = [
   "Saifullah",
 ];
 
+const generateRandomImages = () => {
+  const randomIndex = Math.floor(Math.random() * 12) + 1;
+  const image = `/photos/${randomIndex}.jpg`;
+  return image;
+};
+
 const generateRandomName = () => {
   const firstNameIndex = Math.floor(Math.random() * names.length);
   const lastNameIndex = Math.floor(Math.random() * names.length);
@@ -73,7 +79,6 @@ const generateRandomName = () => {
   const lastName = names[lastNameIndex];
   return `${firstName} ${lastName}`;
 };
-
 
 const generatePhoneNumber = () => {
   const prefix = "018";
@@ -130,21 +135,25 @@ for (let i = 2; i <= 151; i++) {
   const newMember = {
     memberId: i,
     name: generateRandomName(),
-    age: `${Math.floor(Math.random() * 50) + 18}`, // Random age between 18 and 68
+    age: Math.floor(Math.random() * 50) + 18,
     address: "Dhaka Bangladesh",
     phone: generatePhoneNumber(),
-    membershipPlan: ["Basic Plan", "Standard Plan", "Premium Plan"][Math.floor(Math.random() * 3)],
+    membershipPlan: ["Basic Plan", "Standard Plan", "Premium Plan"][
+      Math.floor(Math.random() * 3)
+    ],
+    image: generateRandomImages(),
     gender: ["MALE", "FEMALE"][Math.floor(Math.random() * 2)],
     startDate: generateRandomDate(),
     createdAt: generateRandomCreatedAt(),
     revenue: 0,
   };
-  newMember.endDate = generateEndDate(newMember.startDate, newMember.membershipPlan);
+  newMember.endDate = generateEndDate(
+    newMember.startDate,
+    newMember.membershipPlan,
+  );
   newMember.revenue = generateRevenue(newMember.membershipPlan);
   placeholderMembers.push(newMember);
 }
-
-console.log(placeholderMembers);
 
 module.exports = {
   placeholderMembers,

@@ -12,7 +12,7 @@ export const Container = ({
   className,
   element = "div",
 }: ContainerProps) => {
-  const classNames = cn("mx-auto px-6 w-full max-w-screen-2xl", className);
+  const classNames = cn("mx-auto px-4 xs:px-6 w-full max-w-screen-2xl", className);
   return element === "section" ? (
     <section className={classNames}>{children}</section>
   ) : (

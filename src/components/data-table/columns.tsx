@@ -1,6 +1,6 @@
 "use client";
 
-import { membershipPlans } from "@/constants";
+import { membershipPlans, today } from "@/constants";
 import {
   capitalize,
   cn,
@@ -8,17 +8,17 @@ import {
   formatPhone,
   getMemberStatus,
 } from "@/lib/utils";
-import { MemberType } from "@/types";
-import { Gender } from "@prisma/client";
+import { Gender, Member } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
+import { Award, Gem, Shield } from "lucide-react";
+import { BsGenderFemale, BsGenderMale } from "react-icons/bs";
 import { Photo } from "../photo";
 import { Badge } from "../ui/badge";
 import { CellAction } from "./cell-action";
 import { CellHeader } from "./cell-header";
-import {BsGenderFemale, BsGenderMale} from 'react-icons/bs'
-import { ArrowDownNarrowWide, ArrowUpNarrowWide, Award, Gem, Shield } from "lucide-react";
+import { StatusDropdownMenu } from "./status-dropdown-menu";
 
-export const columns: ColumnDef<MemberType>[] = [
+export const columns: ColumnDef<Member>[] = [
   {
     accessorKey: "memberId",
     header: "ID",
@@ -78,21 +78,16 @@ export const columns: ColumnDef<MemberType>[] = [
   {
     accessorKey: "id",
     header: () => {
-      return (
-        <CellHeader
-          items={["Asc", "Desc"]}
-          filterKey="order_by"
-          label="Status"
-          icons={[ArrowUpNarrowWide, ArrowDownNarrowWide]}
-        />
-      );
+      return <StatusDropdownMenu />;
     },
     cell: ({ row }) => {
-      const { startDate, endDate, renews } = row.original;
+      const { startDate, endDate } = row.original;
+
+      const isPending = startDate > today;
 
       const { status, message } = getMemberStatus({
-        endDate: renews[0]?.endDate || endDate,
-        startDate: startDate > new Date() ? startDate : undefined,
+        endDate,
+        startDate,
       });
 
       return (
@@ -116,18 +111,16 @@ export const columns: ColumnDef<MemberType>[] = [
     accessorKey: "startDate",
     header: "Start Date",
     cell: ({ row }) => {
-      const { startDate, renews } = row.original;
-      const date = renews.length ? renews[0].startDate : startDate;
-      return formatDate(date);
+      const { startDate } = row.original;
+      return formatDate({date: startDate});
     },
   },
   {
     accessorKey: "endDate",
     header: "Expire Date",
     cell: ({ row }) => {
-      const { endDate, renews } = row.original;
-      const date = renews.length ? renews[0].endDate : endDate;
-      return formatDate(date);
+      const { endDate } = row.original;
+      return formatDate({date: endDate});
     },
   },
   {

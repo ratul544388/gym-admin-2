@@ -26,7 +26,7 @@ export const List = ({ items, className }: ListProps) => {
             <p className={cn("text-muted-foreground", labelClassName)}>
               {label}:
             </p>
-            <p className={cn(valueClassName)}>{value}</p>
+            <p className={cn(valueClassName)}>{value || "Not given"}</p>
           </li>
         ),
       )}

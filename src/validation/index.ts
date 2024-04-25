@@ -15,7 +15,7 @@ export const MemberSchema = z.object({
       "Please Enter a valid phone number",
     ),
   address: z.string().optional(),
-  age: z.string().optional(),
+  age: z.coerce.number().optional(),
   gender: z.nativeEnum(Gender, { required_error: "Gender is required" }),
   startDate: z.date({ required_error: "Date is required" }),
   membershipPlan: z.string({ required_error: "Membership Plan is required" }),
