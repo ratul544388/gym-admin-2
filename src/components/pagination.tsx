@@ -139,7 +139,7 @@ export const Pagination = ({ maxPages }: PaginationProps) => {
       )}
       <Button
         onClick={() => handleClick(currentPage + 1)}
-        disabled={currentPage === maxPages}
+        disabled={currentPage === (maxPages || 1)}
         variant="ghost"
         size="icon"
         className="size-8 rounded-full bg-background"
