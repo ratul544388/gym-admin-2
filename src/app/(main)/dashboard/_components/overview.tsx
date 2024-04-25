@@ -1,6 +1,5 @@
 "use client";
 
-import { primaryColor } from "@/constants";
 import { formatPrice } from "@/lib/utils";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
@@ -21,19 +20,19 @@ export function Overview({
         <BarChart data={data}>
           <XAxis
             dataKey="name"
-            stroke={primaryColor}
+            stroke="hsl(var(--primary))"
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <YAxis
-            stroke={primaryColor}
+            stroke="hsl(var(--primary))"
             fontSize={12}
             tickLine={false}
             axisLine={false}
             tickFormatter={(value) => formatPrice(parseInt(value))}
           />
-          <Bar dataKey="total" fill={primaryColor} radius={[4, 4, 0, 0]} />
+          <Bar dataKey="total" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

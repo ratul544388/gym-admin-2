@@ -7,7 +7,6 @@ export const today = new Date();
 
 export const _30DaysLessDate = subDays(today, 30);
 
-export const primaryColor = "#2563EB";
 export const fallbackImage = "/placeholder.jpg";
 
 export const sidebarLinks = [

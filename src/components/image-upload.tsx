@@ -95,7 +95,7 @@ export const ImageUpload = ({
           value={uploadProgress}
           className="abs_center size-12"
           styles={buildStyles({
-            pathColor: "rgb(59, 130, 246)",
+            pathColor: "hsl(var(--primary))",
           })}
         />
       )}
