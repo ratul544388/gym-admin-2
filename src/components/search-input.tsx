@@ -24,11 +24,9 @@ export const SearchInput = ({
   const { setLoading } = useLoadingStore();
 
   useEffect(() => {
+    setLoading(true);
     if (debouncedValue) {
-      setLoading(true);
-      router.push(
-        `/members?q=${debouncedValue.replace(/ /g, "+").toLowerCase()}`,
-      );
+      push({ q: debouncedValue.replace(/ /g, "+") });
     } else {
       push({ q: debouncedValue });
     }

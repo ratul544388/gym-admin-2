@@ -21,7 +21,7 @@ export const ProfileModal = () => {
   >([]);
 
   useEffect(() => {
-    if (data.member?.id) {
+    if (data.member?.id && type === "profileModal") {
       startTransition(() => {
         getMembershipRecords(data.member?.id as string).then(
           ({ error, records }) => {
@@ -34,7 +34,7 @@ export const ProfileModal = () => {
         );
       });
     }
-  }, [data.member?.id]);
+  }, [data.member?.id, type]);
 
   if (!member) return;
 
@@ -121,39 +121,38 @@ export const ProfileModal = () => {
         <h2 className="text-center font-bold">Status</h2>
         <span className="mt-2 block w-full border border-dashed" />
         <ul className="mt-3 flex flex-col items-center gap-3">
-          {
-            membershipRecoreds.map(({ id, createdAt, revenue }, index) => {
-              const label =
-                index === 0
-                  ? "Joined"
-                  : index === 1
-                    ? "1st Renew"
-                    : index === 2
-                      ? "2nd Renew"
-                      : index === 3
-                        ? "3rd Renew"
-                        : `${index}th Renew`;
-              return (
-                <li
-                  key={id}
-                  className="flex flex-col items-center gap-3 text-sm font-medium text-muted-foreground"
-                >
-                  {index > 0 && (
-                    <ArrowDown className="size-5 text-muted-foreground" />
-                  )}
-                  <div className="flex items-center gap-3">
-                    <h5>{label}:</h5>
-                    <h5>{formatDate({ date: createdAt })}</h5>
-                    <p className="font-semibold text-primary">
-                      +{formatPrice(revenue)}
-                    </p>
-                  </div>
-                </li>
-              );
-            })}
+          {membershipRecoreds.map(({ id, createdAt, revenue }, index) => {
+            const label =
+              index === 0
+                ? "Joined"
+                : index === 1
+                  ? "1st Renew"
+                  : index === 2
+                    ? "2nd Renew"
+                    : index === 3
+                      ? "3rd Renew"
+                      : `${index}th Renew`;
+            return (
+              <li
+                key={id}
+                className="flex flex-col items-center gap-3 text-sm font-medium text-muted-foreground"
+              >
+                {index > 0 && (
+                  <ArrowDown className="size-5 text-muted-foreground" />
+                )}
+                <div className="flex items-center gap-3">
+                  <h5>{label}:</h5>
+                  <h5>{formatDate({ date: createdAt })}</h5>
+                  <p className="font-semibold text-primary">
+                    +{formatPrice(revenue)}
+                  </p>
+                </div>
+              </li>
+            );
+          })}
         </ul>
         {!!!membershipRecoreds.length && (
-          <div className="flex items-center gap-3 justify-center text-sm text-muted-foreground">
+          <div className="flex items-center justify-center gap-3 text-sm text-muted-foreground">
             <h5>Joined:</h5>
             <h5>{formatDate({ date: createdAt })}</h5>
             <p className="font-semibold text-primary">

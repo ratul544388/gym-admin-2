@@ -109,6 +109,7 @@ export const EditMemberModal = () => {
                     required={false}
                     disabled={isPending}
                     label="memberId"
+                    type="number"
                     {...field}
                   />
                 </FormControl>

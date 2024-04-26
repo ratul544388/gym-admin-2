@@ -36,12 +36,9 @@ export const createMember = async ({
         ? modifiedCost
         : admissionFee + membershipPlan.price;
 
-    const memberId = (await db.member.count()) + 1;
-
     await db.member.create({
       data: {
         ...values,
-        memberId,
         endDate,
         revenue,
         membershipRecoreds: {
@@ -57,9 +54,14 @@ export const createMember = async ({
 
     revalidatePath("/members");
     return { success: "Member added" };
-  } catch (error) {
-    console.error(error);
-    return { error: "Something went wrong: ID or Phone might exist already" };
+  } catch (error: any) {
+    const target: string = error.meta.target;
+    if (target.includes("memberId")) {
+      return { error: "Id already exist" };
+    } else if (target.includes("phone")) {
+      return { error: "Phone already exist" };
+    }
+    return { error: "Something went wrong" };
   }
 };
 
